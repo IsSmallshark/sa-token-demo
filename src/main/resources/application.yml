@@ -1,6 +1,6 @@
 server:
   # 端口
-  port: 8080
+  port: 8081
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
