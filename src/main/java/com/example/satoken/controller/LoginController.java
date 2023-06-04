@@ -5,8 +5,6 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.example.satoken.entity.UserEntity;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,12 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final SaTokenDaoRedisJackson saTokenDaoRedisJackson;
-    private final RedisTemplate<String, String> redisTemplate;
 
-
-    public LoginController(SaTokenDaoRedisJackson saTokenDaoRedisJackson, RedisTemplate<String, String> redisTemplate) {
+    public LoginController(SaTokenDaoRedisJackson saTokenDaoRedisJackson) {
         this.saTokenDaoRedisJackson = saTokenDaoRedisJackson;
-        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -41,9 +36,6 @@ public class LoginController {
         // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
         if ("zhang".equals(name) && "123456".equals(pwd)) {
             StpUtil.login(10001);
-            ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-            valueOperations.set("token", StpUtil.getTokenValue(), 6000);
-            saTokenDaoRedisJackson.set("token", StpUtil.getTokenValue(), 6000);
             // 在登录时缓存user对象
             StpUtil.getSession().set("user", UserEntity.builder()
                     .id(1).password("123").username("zss")
